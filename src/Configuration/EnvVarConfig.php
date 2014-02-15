@@ -10,6 +10,9 @@ class EnvVarConfig{
 	const EXT = '.yml';
 	const DEFAULT_FILE_NAME = 'env';
 
+	const PARAMS_KEY = 'parameters';
+
+
 	protected $dir;
 	protected $fileName;
 
@@ -20,6 +23,7 @@ class EnvVarConfig{
 		$this->setFileName($fileName);
 
 
+		$this->params = array();
 		$this->setParser(new Parser());
 	}
 
@@ -37,6 +41,13 @@ class EnvVarConfig{
 	}
 
 
+	function save(){
+		foreach ($this->getParams() as $key => $value) {
+			define(strtoupper($key), $value);
+		}
+	}
+
+
 	function getFilePath(){
 		return $this->getDir() . $this->getFileName();
 	}
@@ -47,7 +58,9 @@ class EnvVarConfig{
 
 
 	function setParams(array $params){
-		$this->params = $params;
+		if(array_key_exists(self::PARAMS_KEY, $params) && is_array($params[self::PARAMS_KEY])){
+			$this->params = $params[self::PARAMS_KEY];
+		}
 	}
 
 

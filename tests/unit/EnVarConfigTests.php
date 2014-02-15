@@ -55,6 +55,50 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function testOnlyArraysWithParmsKeyValidAreSet(){
+
+		$config = new EnvVarConfig('');
+
+		$config->setParams(array(1,2,3,4,5));
+
+		$this->assertCount(0, $config->getParams());
+
+		$validParams = array("parameters" => array(
+				"environment" => 'dev'
+			));
+
+		$config->setParams($validParams);
+
+		$this->assertCount(1,$config->getParams());
+	}
+
+
+	function testParamsAreSaved(){
+		$config = new EnvVarConfig('');
+		$params = array("parameters" => array(
+				'environment' => 'dev',
+				'db_name' => 'wordpress', 
+				'db_user' => 'root', 
+				'db_host' => 'localhost', 
+				'db_password' => '',
+				'wp_home' => 'http://localhost:8000'
+		));
+
+		$config->setParams($params);
+		$config->save();
+
+
+		$constants = array('ENVIRONMENT', 'DB_NAME', 'DB_USER', 'DB_HOST', 'DB_PASSWORD', 'WP_HOME');
+
+		foreach ($constants as $constant) {
+			$this->assertTrue(
+				defined($constant),
+				"[${constant}] constant must be defined"
+			);
+		}
+	}
+
+
 	function testConfigLoad(){
 
 		$config = $this->getConfig('valid');
