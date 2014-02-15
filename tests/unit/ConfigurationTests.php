@@ -17,4 +17,25 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase{
 
 	}
 
+
+	function testCanRegisterLoaders(){
+
+		$loader = $this->mockEnvLoader();
+
+		$this->obj->bind('environment', function($dir) use ($loader){
+			return $loader->setConstructorArgs(array($dir))->getMock();
+		});
+
+
+
+		$this->assertNotNull($this->obj->getLoader('environment'));
+	}
+
+
+	function mockEnvLoader(array $methods = array()){
+		return $this
+			->getMockBuilder('Ixa\\WordPress\\Configuration\\EnvironmentConfig')
+			->setMethods($methods);
+	}
+
 }
