@@ -7,14 +7,18 @@ namespace Ixa\WordPress\Configuration;
 class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 
 
+	function setUp(){
+
+		$this->currentDir = dirname(__FILE__) . '/';
+	}
+
 
 	function testEnVarConfigCanBeCreatedWithAPath(){
 		
-		$currentDir = dirname(__FILE__);
-		$config = new EnvVarConfig($currentDir);
+		$config = new EnvVarConfig($this->currentDir);
 
 
-		$this->assertSame($config->getDir(),$currentDir);
+		$this->assertSame($config->getDir(),$this->currentDir);
 
 	}
 
@@ -38,6 +42,19 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 			'If passed as second argument in constructor, default path can be overriten'
 			);
 	}
+
+	function testGetPathContainsDirAndName(){
+		$config = new EnvVarConfig($this->currentDir, 'custom');
+
+
+		$this->assertSame(
+			$config->getFilePath(),
+			$this->currentDir . 'custom.yml',
+			"The path of file must be dir plus filename"
+			);
+	}
+
+
 
 
 }

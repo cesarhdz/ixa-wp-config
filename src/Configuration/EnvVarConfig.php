@@ -11,6 +11,7 @@ class EnvVarConfig{
 	protected $dir;
 	protected $fileName;
 
+	protected $params;
 
 	public function __construct($dir, $fileName = null){
 		$this->setDir($dir);
@@ -18,10 +19,20 @@ class EnvVarConfig{
 	}
 
 
-	function getFilePath(){
-		$this->getDir() . $this->getName() . self::EXT;
+	function load(){
+
+		$content = file_get_contents($this->getFilePath());
+
 	}
 
+
+	function getFilePath(){
+		return $this->getDir() . $this->getFileName();
+	}
+
+	function getParams(){
+		return $this->params;
+	}
 
 
 	function getFileName(){
