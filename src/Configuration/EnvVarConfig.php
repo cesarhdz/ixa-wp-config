@@ -2,6 +2,8 @@
 
 namespace Ixa\WordPress\Configuration;
 
+use Symfony\Component\Yaml\Parser;
+
 
 class EnvVarConfig{
 
@@ -16,13 +18,22 @@ class EnvVarConfig{
 	public function __construct($dir, $fileName = null){
 		$this->setDir($dir);
 		$this->setFileName($fileName);
+
+
+		$this->setParser(new Parser());
 	}
 
 
+	/**
+	 * Load
+	 * Parse and save file into $this->params
+	 * @return void
+	 */
 	function load(){
 
 		$content = file_get_contents($this->getFilePath());
 
+		$this->setParams($this->parser->parse($content));
 	}
 
 
@@ -32,6 +43,11 @@ class EnvVarConfig{
 
 	function getParams(){
 		return $this->params;
+	}
+
+
+	function setParams(array $params){
+		$this->params = $params;
 	}
 
 
@@ -52,5 +68,10 @@ class EnvVarConfig{
 
 	function setFileName($fileName){
 		$this->fileName = $fileName;
+	}
+
+
+	function setParser(Parser $parser){
+		$this->parser = $parser;
 	}
 }

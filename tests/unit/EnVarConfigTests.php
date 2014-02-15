@@ -55,6 +55,28 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function testConfigLoad(){
+
+		$config = $this->getConfig('valid');
+
+		$config->load();
+
+		$this->assertTrue(is_array($config->getParams()));
+	}
+
+
+	/**
+	 * Get Config
+	 * Return a EnvVarConfigObject
+	 * @param  [type] $fileName file to load
+	 * @return EnvVarConfig     new ConfigLoader ready to test
+	 */
+	function getConfig($fileName){
+
+		$dir = get_config_dir('env-vars');
+
+		return new EnvVarConfig($dir, $fileName);
+	}
 
 
 }
