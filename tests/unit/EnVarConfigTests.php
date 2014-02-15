@@ -2,7 +2,7 @@
 
 namespace Ixa\WordPress\Configuration;
 
-
+use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
 
 class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 
@@ -138,6 +138,14 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 		$config->load();
 
 		$this->assertTrue(is_array($config->getParams()));
+	}
+
+
+	function testIfFileNotExistsWhenLoadingAnExceptionIsThrown(){
+
+		$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\FileNotFoundException');
+		$this->config->load();
+
 	}
 
 

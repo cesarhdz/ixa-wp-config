@@ -2,6 +2,8 @@
 
 namespace Ixa\WordPress\Configuration;
 
+use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
+
 use Symfony\Component\Yaml\Parser;
 
 
@@ -42,6 +44,12 @@ class EnvVarConfig{
 	 * @return void
 	 */
 	function load(){
+
+		$path = $this->getFilePath();
+
+		if(! file_exists($path)){
+			throw new FileNotFoundException('Environment', $path);
+		}
 
 		$content = file_get_contents($this->getFilePath());
 
