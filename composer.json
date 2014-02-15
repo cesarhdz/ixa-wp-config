@@ -1,0 +1,14 @@
+{
+    "name": "ixa/wp-config",
+    "description": "WordPress Configurator Alternative",
+    "require": {
+        "symfony/yaml": "~2.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cesar Hernandez",
+            "email": "mrshortcuts@gmail.com"
+        }
+    ]
+}
