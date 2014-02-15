@@ -4,19 +4,19 @@ namespace Ixa\WordPress\Configuration;
 
 use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
 
-class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
+class EnvironmentConfigTest extends \PHPUnit_Framework_TestCase{
 
 
 	function setUp(){
 
 		$this->currentDir = dirname(__FILE__) . '/';
-		$this->config = new EnvVarConfig('');
+		$this->config = new EnvironmentConfig('');
 	}
 
 
 	function testEnVarConfigCanBeCreatedWithAPath(){
 		
-		$config = new EnvVarConfig($this->currentDir);
+		$config = new EnvironmentConfig($this->currentDir);
 
 
 		$this->assertSame($config->getDir(),$this->currentDir);
@@ -33,7 +33,7 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 		);
 
 
-		$config = new EnvVarConfig('', 'custom');
+		$config = new EnvironmentConfig('', 'custom');
 
 		$this->assertSame(
 			$config->getFileName(),
@@ -43,7 +43,7 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 	function testGetPathContainsDirAndName(){
-		$config = new EnvVarConfig($this->currentDir, 'custom');
+		$config = new EnvironmentConfig($this->currentDir, 'custom');
 
 
 		$this->assertSame(
@@ -151,15 +151,15 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 
 	/**
 	 * Get Config
-	 * Return a EnvVarConfigObject
+	 * Return a EnvironmentConfigObject
 	 * @param  [type] $fileName file to load
-	 * @return EnvVarConfig     new ConfigLoader ready to test
+	 * @return EnvironmentConfig     new ConfigLoader ready to test
 	 */
 	function getConfig($fileName){
 
 		$dir = get_config_dir('env-vars');
 
-		return new EnvVarConfig($dir, $fileName);
+		return new EnvironmentConfig($dir, $fileName);
 	}
 
 

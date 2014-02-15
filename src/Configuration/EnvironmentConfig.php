@@ -7,7 +7,7 @@ use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
 use Symfony\Component\Yaml\Parser;
 
 
-class EnvVarConfig{
+class EnvironmentConfig{
 
 	const EXT = '.yml';
 	const DEFAULT_FILE_NAME = 'env';
