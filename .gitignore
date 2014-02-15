@@ -2,3 +2,6 @@
 vendor
 composer.lock
 
+
+#PHPUnit
+test/reports/
