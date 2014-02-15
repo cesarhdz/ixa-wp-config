@@ -5,14 +5,16 @@ use Symfony\Component\Yaml\Parser;
 
 class EnvFile{
 
+	const PARAMS_KEY = 'parameters';
+
 	protected $path;
 	protected $parser;
 
 	protected $params;
 
 
-	function __construct($path){
-		$this->path = $path;
+	function __construct($path = ''){
+		$this->setPath($path);
 	}
 
 
@@ -23,15 +25,25 @@ class EnvFile{
 	}
 
 	function register(){
-
-
+		foreach ($this->getEnvVar() as $key => $value) {
+			define(strtoupper($key), $value);
+		}
 	}
 
-	function getParams(){ return $this->params; }
+	function getEnvVar(){ return $this->params[self::PARAMS_KEY]; }
+
+	
+	function setParams(array $params){
+		$this->params = $params;
+	}
 
 
 	function setParser($parser){
 		$this->parser = $parser;
+	}
+
+	function setPath($path){
+		$this->path = $path;
 	}
 
 }

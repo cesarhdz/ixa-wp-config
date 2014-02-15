@@ -26,18 +26,15 @@ class Configurator{
 
 
 	function loadEnvVars(){
-		$file = file_get_contents($this->getEnvFilePath());
-		$parser = $this->getParser();
+		$envFile = $this->getEnvFile();
 
-		$this->envVars = $parser->parse($file);
+		$envFile->setParser(new Parser());
+		$envFile->parse();
+		$envFile->register();
 	}
 
 	function getEnvVars(){ return $this->envVars; }
 
-
-	function getParser(){
-		return new Parser();
-	}
 
 
 	function getDir(){ return $this->dir; }
