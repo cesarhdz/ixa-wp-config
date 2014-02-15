@@ -73,10 +73,37 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+
+	function testOnlyWhiteListVarsAreSaved(){
+
+		$config = new EnvVarConfig('');
+
+		$config->setParams(array("parameters"=> array(
+			'environment' => 'dev',
+			'invalidKey' => 'prod'
+			)));
+
+
+		// var_dump($config->getParams());
+
+
+		$this->assertContains(
+			'dev',
+			$config->getParams(),
+			'environment is a valid param and must be registered'
+			);
+
+		$this->assertNotContains(
+			'prod',
+			$config->getParams(),
+			'invalidaKey is not a valid param and must not be registered'
+			);
+	}
+
+
 	function testParamsAreSaved(){
 		$config = new EnvVarConfig('');
 		$params = array("parameters" => array(
-				'environment' => 'dev',
 				'db_name' => 'wordpress', 
 				'db_user' => 'root', 
 				'db_host' => 'localhost', 
@@ -87,8 +114,9 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 		$config->setParams($params);
 		$config->save();
 
-
-		$constants = array('ENVIRONMENT', 'DB_NAME', 'DB_USER', 'DB_HOST', 'DB_PASSWORD', 'WP_HOME');
+		// Bacuase constant can be only defined once, 
+		// environemnt var is not set in this test
+		$constants = array('DB_NAME', 'DB_USER', 'DB_HOST', 'DB_PASSWORD', 'WP_HOME');
 
 		foreach ($constants as $constant) {
 			$this->assertTrue(

@@ -12,6 +12,14 @@ class EnvVarConfig{
 
 	const PARAMS_KEY = 'parameters';
 
+	static $validKeys = array(
+		'environment',
+		'db_user',
+		'db_name',
+		'db_host',
+		'db_password',
+		'wp_home'
+	);
 
 	protected $dir;
 	protected $fileName;
@@ -41,6 +49,11 @@ class EnvVarConfig{
 	}
 
 
+	/**
+	 * Save
+	 * Register all params as constants
+	 * @return void
+	 */
 	function save(){
 		foreach ($this->getParams() as $key => $value) {
 			define(strtoupper($key), $value);
@@ -59,7 +72,10 @@ class EnvVarConfig{
 
 	function setParams(array $params){
 		if(array_key_exists(self::PARAMS_KEY, $params) && is_array($params[self::PARAMS_KEY])){
-			$this->params = $params[self::PARAMS_KEY];
+			$this->params = array_intersect_key(
+				$params[self::PARAMS_KEY], 
+				array_flip(self::$validKeys)
+			);
 		}
 	}
 
