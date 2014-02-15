@@ -4,4 +4,4 @@ composer.lock
 
 
 #PHPUnit
-test/reports/
+tests/reports/
