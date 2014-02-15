@@ -1,0 +1,5 @@
+# Development and test files are ignored from git archive
+
+
+phpunit.xml export-ignore
+tests/ export-ignore
