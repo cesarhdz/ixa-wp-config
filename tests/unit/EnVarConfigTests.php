@@ -10,6 +10,7 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 	function setUp(){
 
 		$this->currentDir = dirname(__FILE__) . '/';
+		$this->config = new EnvVarConfig('');
 	}
 
 
@@ -25,10 +26,8 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 
 	function testCanGetAndSetNameOfFile(){
 
-		$config = new EnvVarConfig('');
-
 		$this->assertSame(
-			$config->getFileName(), 
+			$this->config->getFileName(), 
 			'env.yml', 
 			'By default the .env.yml file is loaded'
 		);
@@ -57,28 +56,24 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 
 	function testOnlyArraysWithParmsKeyValidAreSet(){
 
-		$config = new EnvVarConfig('');
+		$this->config->setParams(array(1,2,3,4,5));
 
-		$config->setParams(array(1,2,3,4,5));
-
-		$this->assertCount(0, $config->getParams());
+		$this->assertCount(0, $this->config->getParams());
 
 		$validParams = array("parameters" => array(
 				"environment" => 'dev'
 			));
 
-		$config->setParams($validParams);
+		$this->config->setParams($validParams);
 
-		$this->assertCount(1,$config->getParams());
+		$this->assertCount(1,$this->config->getParams());
 	}
 
 
 
 	function testOnlyWhiteListVarsAreSaved(){
 
-		$config = new EnvVarConfig('');
-
-		$config->setParams(array("parameters"=> array(
+		$this->config->setParams(array("parameters"=> array(
 			'environment' => 'dev',
 			'invalidKey' => 'prod'
 			)));
@@ -89,30 +84,29 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 
 		$this->assertContains(
 			'dev',
-			$config->getParams(),
+			$this->config->getParams(),
 			'environment is a valid param and must be registered'
 			);
 
 		$this->assertNotContains(
 			'prod',
-			$config->getParams(),
+			$this->config->getParams(),
 			'invalidaKey is not a valid param and must not be registered'
 			);
 	}
 
+	var $validParams = array("parameters" => array(
+			'db_name' => 'wordpress', 
+			'db_user' => 'root', 
+			'db_host' => 'localhost', 
+			'db_password' => '',
+			'wp_home' => 'http://localhost:8000'
+	));
 
 	function testParamsAreSaved(){
-		$config = new EnvVarConfig('');
-		$params = array("parameters" => array(
-				'db_name' => 'wordpress', 
-				'db_user' => 'root', 
-				'db_host' => 'localhost', 
-				'db_password' => '',
-				'wp_home' => 'http://localhost:8000'
-		));
 
-		$config->setParams($params);
-		$config->save();
+		$this->config->setParams($this->validParams);
+		$this->config->save();
 
 		// Bacuase constant can be only defined once, 
 		// environemnt var is not set in this test
@@ -124,6 +118,16 @@ class EnvVarConfigTest extends \PHPUnit_Framework_TestCase{
 				"[${constant}] constant must be defined"
 			);
 		}
+	}
+
+	function testDoesntTryToSetDefinedConstants(){
+
+		$this->config->setParams($this->validParams);
+
+		$this->config->save();
+		$this->config->save();
+
+		$this->assertTrue(defined('DB_NAME'), "Constants are defined only Once");
 	}
 
 

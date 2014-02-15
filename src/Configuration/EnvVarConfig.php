@@ -56,7 +56,10 @@ class EnvVarConfig{
 	 */
 	function save(){
 		foreach ($this->getParams() as $key => $value) {
-			define(strtoupper($key), $value);
+
+			$constant = strtoupper($key);
+
+			if(! defined($constant)) define($constant, $value);
 		}
 	}
 
