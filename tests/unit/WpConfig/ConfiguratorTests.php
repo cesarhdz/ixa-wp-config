@@ -16,14 +16,13 @@ class ConfiguratorTests extends \PHPUnit_Framework_TestCase{
 	}
 
 
-	function testCanReadEnvFile(){
-
+	function testAnEnvFileIsReturned(){
 		$dir = get_config_dir('env-config');
 		$config = new Configurator($dir);
 
-		$config->loadEnvVars();
+		$file = $config->getEnvFile();
 
-		$this->assertTrue(is_array($config->getEnvVars()));
+		$this->assertInstanceOf('Ixa\\WpConfig\\EnvFile', $file);
 	}
 
 

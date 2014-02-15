@@ -18,8 +18,10 @@ class Configurator{
 	}
 
 
-	function getEnvFilePath(){
-		return $this->getDir() . self::ENV_FILE;
+	function getEnvFile(){
+		$path = $this->getDir() . self::ENV_FILE;
+
+		return new EnvFile($path);
 	}
 
 
