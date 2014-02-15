@@ -9,12 +9,16 @@ class Configuration{
 	protected $dir;
 	protected $loaders;
 
+
+	protected static $defaultLoaders = array(
+		'environment' => 'Ixa\\WordPress\\Configuration\\EnvironmentConfig'
+		);
+
 	function __construct($dir){
 
 		$this->setDir($dir);
 
-		$this->loaders = array();
-
+		$this->bindDefaultLoaders();
 	}
 
 
@@ -44,6 +48,17 @@ class Configuration{
 
 	function setDir($dir){
 		$this->dir = $dir;
+	}
+
+
+	protected function bindDefaultLoaders(){
+
+		$this->loaders = array();
+
+
+		foreach (self::$defaultLoaders as $key => $clazz) {
+			$this->addLoader($key, new $clazz($this->getDir()));
+		}
 	}
 
 

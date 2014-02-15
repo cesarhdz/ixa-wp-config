@@ -18,11 +18,17 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function testEnvironmentLoaderIsPredefined(){
+
+		$this->assertNotNull($this->obj->getLoader('environment'));
+
+	}
+
 	function testCanRegisterLoaders(){
 
 		$loader = $this->mockEnvLoader();
 
-		$this->obj->bind('environment', function($dir) use ($loader){
+		$this->obj->bind('custom', function($dir) use ($loader){
 			return $loader->setConstructorArgs(array($dir))->getMock();
 		});
 
