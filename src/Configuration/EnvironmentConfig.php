@@ -7,7 +7,7 @@ use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
 use Symfony\Component\Yaml\Parser;
 
 
-class EnvironmentConfig{
+class EnvironmentConfig implements ConfigLoader{
 
 	const EXT = '.yml';
 	const DEFAULT_FILE_NAME = 'env';
@@ -102,16 +102,15 @@ class EnvironmentConfig{
 	}
 
 
-	function setDir($dir){
+	function setParser(Parser $parser){
+		$this->parser = $parser;
+	}
+
+	protected function setDir($dir){
 		$this->dir = $dir;
 	}
 
-	function setFileName($fileName){
+	protected function setFileName($fileName){
 		$this->fileName = $fileName;
-	}
-
-
-	function setParser(Parser $parser){
-		$this->parser = $parser;
 	}
 }

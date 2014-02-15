@@ -40,7 +40,7 @@ class Configuration{
 	}
 
 
-	protected function addLoader($name, $obj){
+	protected function addLoader($name, ConfigLoader $obj){
 		$this->loaders[$name] = $obj;
 	}
 

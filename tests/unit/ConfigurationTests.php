@@ -21,6 +21,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase{
 	function testEnvironmentLoaderIsPredefined(){
 
 		$this->assertNotNull($this->obj->getLoader('environment'));
+		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\ConfigLoader',  $this->obj->getLoader('environment'));
 
 	}
 
@@ -35,6 +36,16 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase{
 
 
 		$this->assertNotNull($this->obj->getLoader('environment'));
+		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\ConfigLoader',  $this->obj->getLoader('environment'));
+	}
+
+	function testOnlyConfigLoadersCanBeBinded(){
+
+		$this->setExpectedException('Exception');
+		
+		$this->obj->bind('invalid', function($dir){
+			return array();
+		});
 	}
 
 
