@@ -10,5 +10,8 @@
             "name": "Cesar Hernandez",
             "email": "mrshortcuts@gmail.com"
         }
-    ]
+    ],
+    "autoload":{
+        "psr-4": {"Ixa\\": "src/"}
+    }
 }
