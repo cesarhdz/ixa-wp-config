@@ -3,3 +3,6 @@
 
 phpunit.xml export-ignore
 tests/ export-ignore
+
+#CI 
+.travis.yml
