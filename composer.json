@@ -1,6 +1,7 @@
 {
     "name": "ixa/wp-config",
     "description": "WordPress Configurator Alternative",
+    "type": "library",
     "require": {
         "symfony/yaml": "~2.4"
     },
@@ -10,5 +11,8 @@
             "name": "Cesar Hernandez",
             "email": "mrshortcuts@gmail.com"
         }
-    ]
+    ],
+    "autoload": {
+         "psr-4": {"Ixa\\WordPress\\": "src/"}
+    }
 }
