@@ -49,7 +49,32 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
-	function mockEnvLoader(array $methods = array()){
+	function testAllRegisteredLoaderesAreRun(){
+
+		// 10 loaders are bound
+		for ($i=0; $i < 10; $i++) {
+			
+			$loader = $this->getMock('Ixa\\WordPress\\Configuration\\ConfigLoader');
+					
+			$loader->expects($this->once())
+				 ->method('load');
+
+			$loader->expects($this->once())
+				 ->method('save');
+
+			$name = ($i == 0) ? 'environment' : 'e-'.$i;
+
+			$this->obj->bind($name, function($dir) use ($loader){
+				return $loader;
+			});
+
+		}
+
+		$this->obj->load();
+	}
+
+
+	protected function mockEnvLoader(array $methods = array()){
 		return $this
 			->getMockBuilder('Ixa\\WordPress\\Configuration\\EnvironmentConfig')
 			->setMethods($methods);

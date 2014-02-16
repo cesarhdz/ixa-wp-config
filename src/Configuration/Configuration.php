@@ -22,6 +22,18 @@ class Configuration{
 	}
 
 
+	/**
+	 * Load
+	 * Call all registered Config Loaders
+	 * @return void 
+	 */
+	function load(){
+		foreach ($this->loaders as $loader){
+			$loader->load();
+			$loader->save();
+		}
+	}
+
 
 	function getDir(){
 		return $this->dir;
