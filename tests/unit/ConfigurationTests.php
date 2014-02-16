@@ -18,6 +18,18 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function testAlDirsHaveTrailingSlash(){
+		$config = new Configuration('noTrailingSlash');
+
+
+		$this->assertEquals(
+			$config->getDir(),
+			'noTrailingSlash/',
+			'In order to avoid concatenating  dir and config file named, getDir() must have trailingSlash'
+			);
+	}
+
+
 	function testEnvironmentLoaderIsPredefined(){
 
 		$this->assertNotNull($this->obj->getLoader('environment'));

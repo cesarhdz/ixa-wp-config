@@ -59,7 +59,7 @@ class Configuration{
 
 
 	function setDir($dir){
-		$this->dir = $dir;
+		$this->dir = rtrim($dir, '/') . '/';
 	}
 
 
