@@ -8,7 +8,7 @@ WordPress configuration consistent across environments.
 
 It can be installed using Composer:
 
-    $ composer require ixa/wp-config --dev-master
+    $ composer require ixa/wp-config 0.2
 
 
 ## Usage
