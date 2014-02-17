@@ -10,7 +10,7 @@ use Symfony\Component\Yaml\Parser;
 class EnvironmentConfig implements ConfigLoader{
 
 	const EXT = '.yml';
-	const DEFAULT_FILE_NAME = 'env';
+	const DEFAULT_FILE_NAME = '.env';
 
 	const PARAMS_KEY = 'parameters';
 

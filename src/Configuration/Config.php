@@ -3,7 +3,7 @@
 namespace Ixa\WordPress\Configuration;
 
 
-class Configuration{
+class Config{
 
 
 	protected $dir;

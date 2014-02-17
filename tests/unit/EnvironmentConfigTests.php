@@ -28,7 +28,7 @@ class EnvironmentConfigTest extends \PHPUnit_Framework_TestCase{
 
 		$this->assertSame(
 			$this->config->getFileName(), 
-			'env.yml', 
+			'.env.yml', 
 			'By default the .env.yml file is loaded'
 		);
 
@@ -143,6 +143,12 @@ class EnvironmentConfigTest extends \PHPUnit_Framework_TestCase{
 
 	function testIfFileNotExistsWhenLoadingAnExceptionIsThrown(){
 
+		// Load a valid folder
+		$config = $this->getConfig('');
+		$config->load();
+		$this->assertSame($config->getFileName(), '.env.yml');
+
+		// Then an invalid folder
 		$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\FileNotFoundException');
 		$this->config->load();
 
