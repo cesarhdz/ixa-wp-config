@@ -2,12 +2,12 @@
 
 namespace Ixa\WordPress\Configuration;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase{
+class ConfigTest extends \PHPUnit_Framework_TestCase{
 
 	function setUp(){
 		$this->dir =  get_config_dir('env-vars'); 
 
-		$this->obj = new Configuration($this->dir);
+		$this->obj = new Config($this->dir);
 	}
 
 
@@ -19,7 +19,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase{
 
 
 	function testAlDirsHaveTrailingSlash(){
-		$config = new Configuration('noTrailingSlash');
+		$config = new Config('noTrailingSlash');
 
 
 		$this->assertEquals(
