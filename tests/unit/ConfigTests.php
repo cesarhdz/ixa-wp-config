@@ -86,6 +86,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function testDEfaultLoadersAreEnvironmentAndCore(){
+
+		$clazz = 'Ixa\\WordPress\\Configuration\\ConstantsConfig';
+
+		$this->assertInstanceOf($clazz, $this->obj->getLoader('environment'));
+		$this->assertInstanceOf($clazz, $this->obj->getLoader('environment'));
+
+	}
+
+
 	protected function mockEnvLoader(array $methods = array()){
 		return $this
 			->getMockBuilder('Ixa\\WordPress\\Configuration\\EnvironmentConfig')
