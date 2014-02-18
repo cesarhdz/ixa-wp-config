@@ -63,6 +63,7 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 		$config->load();
 
 		$this->assertTrue(is_array($config->getParams()));
+		$this->assertCount(4, $config->getParams());
 	}
 
 
@@ -78,6 +79,7 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 		$this->config->load();
 
 	}
+
 
 
 	/**

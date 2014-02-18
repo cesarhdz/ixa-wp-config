@@ -24,6 +24,10 @@ class CoreConfig extends AbstractConfigLoader{
 		if(! file_exists($path)){
 			throw new FileNotFoundException('Core Config', $path);
 		}
+
+		$config = include $path;
+
+		$this->setParams($config);
 	}
 
 
