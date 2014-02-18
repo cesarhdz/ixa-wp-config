@@ -3,7 +3,7 @@
 namespace Ixa\WordPress\Configuration;
 
 
-abstract class AbstractConfigLoader implements ConfigLoader{
+abstract class ConstantsConfig implements ConfigLoader{
 
 	protected $dir;
 	protected $fileName;
@@ -18,7 +18,18 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 
 	abstract public function load();
 	
-	abstract public function save();
+	/**
+	 * Save
+	 * Register all params as constants
+	 * @return void
+	 */
+	function save(){
+		foreach ($this->getParams() as $key => $value) {
+			$constant = strtoupper($key);
+
+			if(! defined($constant)) define($constant, $value);
+		}
+	}
 
 
 	function getFilePath(){

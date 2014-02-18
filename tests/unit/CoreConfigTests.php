@@ -98,8 +98,6 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 		
 		$config = $this->getConfig('core', 'invalid');
 
-		var_dump($config->getFilePath());
-
 		$config->load();
 	}
 
@@ -113,6 +111,23 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 		$this->assertCount(4, $config->getParams());
 	}
 
+
+	function testAllParamsAreRegisteredAsConstantsAndCannotBeOverrriden(){
+
+
+		$config = $this->getConfig();
+		$config->setParams(array(
+			'wp_lang' => 'es_ES',
+			'fs_method' => 'direct'
+		));
+
+		$config->save();
+		$config->save();
+		$config->save();
+
+		$this->assertEquals(FS_METHOD, 'direct');
+		$this->assertEquals(WP_LANG, 'es_ES');
+	}
 
 
 	/**

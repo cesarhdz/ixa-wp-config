@@ -7,7 +7,7 @@ use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
 use Symfony\Component\Yaml\Parser;
 
 
-class EnvironmentConfig extends AbstractConfigLoader{
+class EnvironmentConfig extends ConstantsConfig{
 
 	const EXT = '.yml';
 	const DEFAULT_FILE_NAME = '.env';
@@ -47,21 +47,6 @@ class EnvironmentConfig extends AbstractConfigLoader{
 		$content = file_get_contents($this->getFilePath());
 
 		$this->setParams($this->parser->parse($content));
-	}
-
-
-	/**
-	 * Save
-	 * Register all params as constants
-	 * @return void
-	 */
-	function save(){
-		foreach ($this->getParams() as $key => $value) {
-
-			$constant = strtoupper($key);
-
-			if(! defined($constant)) define($constant, $value);
-		}
 	}
 
 

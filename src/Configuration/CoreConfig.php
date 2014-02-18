@@ -8,7 +8,7 @@ use Ixa\WordPress\Configuration\Exceptions\InvalidConfigException;
 use Symfony\Component\Yaml\Parser;
 
 
-class CoreConfig extends AbstractConfigLoader{
+class CoreConfig extends ConstantsConfig{
 
 	const EXT = '.php';
 	const DEFAULT_FILE_NAME = 'config';
@@ -44,16 +44,6 @@ class CoreConfig extends AbstractConfigLoader{
 		}
 		
 		$this->addToParams($config);
-
-	}
-
-
-	/**
-	 * Save
-	 * Register all params as constants
-	 * @return void
-	 */
-	function save(){
 
 	}
 
