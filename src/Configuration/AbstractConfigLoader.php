@@ -26,7 +26,7 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 	}
 
 	function getFileName(){
-		return $this->fileNaName;
+		return $this->fileName;
 	}
 
 	function getDir(){
