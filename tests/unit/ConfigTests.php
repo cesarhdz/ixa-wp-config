@@ -68,30 +68,56 @@ class ConfigTest extends \PHPUnit_Framework_TestCase{
 		});
 	}
 
+	var $loaders = array(
+		'environment' 	=>  'ConstantsConfig',
+		'core'			=>  'ConstantsConfig',
+		'custom1'		=>  'ConfigLoader',
+		'custom2'		=>  'ConfigLoader'
+	);
 
 	function testAllRegisteredLoaderesAreRun(){
 
-		$loaders = array('environment', 'core', 'custom1', 'custom2', 'custom3', 'custom4', 'custom5');
+		foreach ($this->loaders as $name => $clazz) {
 
-		// 10 loaders are bound
-		foreach ($loaders as $name) {
-			$loader = $this->getMock('Ixa\\WordPress\\Configuration\\ConfigLoader');
-					
-			$loader->expects($this->once())
-				 ->method('load');
-
-			$loader->expects($this->once())
-				 ->method('save');
+			$loader = $this->mockLoader($clazz);
 
 			$this->obj->bind($name, function($dir) use ($loader){
-				return $loader;
-			});
 
+				$mock = $loader->setConstructorArgs(array($dir))->getMock();
+	
+				$mock->expects($this->once())
+					 ->method('load');
+
+				return $mock;
+			});
 		}
 
 		$this->obj->load();
 	}
 
+
+	function testEnvironmentConfigMustBeAnInstanceOfConstantsConfig(){
+
+		$loader = $this->getMock('Ixa\\WordPress\\Configuration\\ConfigLoader');
+
+		//@TODO It's thworn because addDefaultLoader only accepts ConstantsConfig loaders
+		$this->setExpectedException('PHPUnit_Framework_Error');
+
+		$this->obj->bind('environment', function($dir) use ($loader){
+			return $loader;
+		});		
+
+	}
+
+	function testCoreConfigMustBeAnInstanceOfConstantsConfig(){
+		$loader = $this->getMock('Ixa\\WordPress\\Configuration\\ConfigLoader');
+
+		$this->setExpectedException('PHPUnit_Framework_Error');
+
+		$this->obj->bind('core', function($dir) use ($loader){
+			return $loader;
+		});
+	}
 
 	protected function mockEnvLoader(array $methods = array()){
 		return $this->mockLoader('EnvironmentConfig', $methods);

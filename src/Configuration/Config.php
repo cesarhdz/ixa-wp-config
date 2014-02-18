@@ -42,7 +42,14 @@ class Config{
 
 
 	function bind($name, $function){
-		$this->addLoader($name, call_user_func($function, $this->getDir()));
+
+		$method = (array_key_exists($name, self::$defaultLoaders)) 
+				? 'addDefaultLoader' 
+				: 'addLoader';
+
+
+		// AddLoader		
+		$this->$method($name, call_user_func($function, $this->getDir()));
 	}
 
 
@@ -54,8 +61,18 @@ class Config{
 
 
 	protected function addLoader($name, ConfigLoader $obj){
+
+
 		$this->loaders[$name] = $obj;
 	}
+
+
+
+	protected function addDefaultLoader($name, ConstantsConfig $obj){
+		$this->loaders[$name] = $obj;
+	}
+
+
 
 
 
