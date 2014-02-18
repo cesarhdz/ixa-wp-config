@@ -92,6 +92,18 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function testIfConfigFileDoesntReturnArreayAndExceptionIsThrown(){
+		
+		$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\InvalidConfigException');
+		
+		$config = $this->getConfig('core', 'invalid');
+
+		var_dump($config->getFilePath());
+
+		$config->load();
+	}
+
+
 	function testConfigAndEnvironmentConfigAreLoaded(){
 
 		$config = $this->getConfig('merge');

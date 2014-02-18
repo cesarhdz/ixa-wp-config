@@ -3,6 +3,7 @@
 namespace Ixa\WordPress\Configuration;
 
 use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
+use Ixa\WordPress\Configuration\Exceptions\InvalidConfigException;
 
 use Symfony\Component\Yaml\Parser;
 
@@ -38,7 +39,9 @@ class CoreConfig extends AbstractConfigLoader{
 
 		$config = include $path;
 
-		
+		if(! is_array($config)){
+			throw new InvalidConfigException("The config file must return an instance of Array", $path);
+		}
 		
 		$this->addToParams($config);
 
