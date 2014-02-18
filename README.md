@@ -24,7 +24,7 @@ use Ixa\WordPress\Configuration\Config;
 require_once 'vendor/autoload.php';
 
 // Load Config from config/ folder
-$config = new Config(dirname(__FILE__) . '/config');
+$config = new Config(__DIR__ . '/config');
 $config->load();
 
 // ... define all variables and require wp-settings

@@ -12,7 +12,7 @@ class Config{
 
 	protected static $defaultLoaders = array(
 		'environment' => 'Ixa\\WordPress\\Configuration\\EnvironmentConfig',
-		'config' => 'Ixa\\WordPress\\Configuration\\EnvironmentConfig'
+		'core' => 'Ixa\\WordPress\\Configuration\\CoreConfig'
 	);
 
 	function __construct($dir){
@@ -30,9 +30,25 @@ class Config{
 	 */
 	function load(){
 		foreach ($this->loaders as $loader){
-			$loader->load();
-			$loader->save();
+			// A different method can be called based on class
+			$method = $this->getMethodFromLoader($loader);
+			
+			$this->$method($loader);
 		}
+	}
+
+	function getMethodFromLoader(ConfigLoader $loader){
+		return ($loader instanceof ConstantsConfig) ? 'loadAndDefine' : 'loadAndSave';
+	}
+
+
+	protected function loadAndDefine(ConstantsConfig $loader){
+		$loader->load();
+		$loader->save();
+	}
+
+	protected function loadAndSave(ConfigLoader $loader){
+		$loader->load();
 	}
 
 
@@ -42,18 +58,29 @@ class Config{
 
 
 	function bind($name, $function){
-		$this->addLoader($name, call_user_func($function, $this->getDir()));
+
+		$method = (array_key_exists($name, self::$defaultLoaders)) 
+				? 'addDefaultLoader' 
+				: 'addLoader';
+
+
+		// AddLoader		
+		$this->$method($name, call_user_func($function, $this->getDir()));
 	}
 
 
 	function getLoader($name){
-
 		return $this->loaders[$name];
-
 	}
 
 
 	protected function addLoader($name, ConfigLoader $obj){
+		$this->loaders[$name] = $obj;
+	}
+
+
+
+	protected function addDefaultLoader($name, ConstantsConfig $obj){
 		$this->loaders[$name] = $obj;
 	}
 
