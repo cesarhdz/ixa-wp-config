@@ -3,7 +3,7 @@
 
 return array(
 
-	'WP_LANG' => 'es_ES',
+	'WP_LANG' => 'en_GB',
 
 	'DB_CHARSET' => 'utf8',
 

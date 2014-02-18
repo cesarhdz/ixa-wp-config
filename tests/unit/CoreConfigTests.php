@@ -107,8 +107,10 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 		$config = $this->getConfig('merge');
 		$config->load();
 
+		$params = $config->getParams();
 
-		$this->assertCount(4, $config->getParams());
+		$this->assertCount(4, $params);
+		$this->assertEquals('es_ES', $params['WP_LANG']);
 	}
 
 
