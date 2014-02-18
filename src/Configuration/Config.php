@@ -30,9 +30,25 @@ class Config{
 	 */
 	function load(){
 		foreach ($this->loaders as $loader){
-			$loader->load();
-			$loader->save();
+			// A different method can be called based on class
+			$method = $this->getMethodFromLoader($loader);
+			
+			$this->$method($loader);
 		}
+	}
+
+	function getMethodFromLoader(ConfigLoader $loader){
+		return ($loader instanceof ConstantsConfig) ? 'loadAndDefine' : 'loadAndSave';
+	}
+
+
+	protected function loadAndDefine(ConstantsConfig $loader){
+		$loader->load();
+		$loader->save();
+	}
+
+	protected function loadAndSave(ConfigLoader $loader){
+		$loader->load();
 	}
 
 
@@ -54,15 +70,11 @@ class Config{
 
 
 	function getLoader($name){
-
 		return $this->loaders[$name];
-
 	}
 
 
 	protected function addLoader($name, ConfigLoader $obj){
-
-
 		$this->loaders[$name] = $obj;
 	}
 
@@ -71,8 +83,6 @@ class Config{
 	protected function addDefaultLoader($name, ConstantsConfig $obj){
 		$this->loaders[$name] = $obj;
 	}
-
-
 
 
 

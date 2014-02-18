@@ -95,6 +95,39 @@ class ConfigTest extends \PHPUnit_Framework_TestCase{
 		$this->obj->load();
 	}
 
+	
+	function testOnlyConstantLoadersAreSaved(){
+
+		foreach ($this->loaders as $name => $clazz) {
+
+			$loader = $this->mockLoader($clazz);
+
+			$this->obj->bind($name, function($dir) use ($loader, $clazz){
+
+				$mock = $loader->setConstructorArgs(array($dir))->getMock();
+	
+
+				if($clazz == 'ConstantsConfig'){
+
+					$mock->expects($this->once())
+						 ->method('save');
+					
+				}else{
+
+					$mock->expects($this->never())
+						 ->method('save');
+				}
+
+
+				return $mock;
+			});
+		}
+
+		$this->obj->load();
+
+
+	}
+
 
 	function testEnvironmentConfigMustBeAnInstanceOfConstantsConfig(){
 
