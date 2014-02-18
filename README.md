@@ -59,3 +59,23 @@ parameters:
 All variables are required and must be placed under `parameters`. This is because the `.env.yml`  file can be generated dynamically using [Incenteev/ParameterHandler](https://github.com/Incenteev/ParameterHandler).
 
 
+### Core Configuration
+
+The `config.php` file is also required and must return array with the constants that will be declared, e.g.
+
+  <?php
+
+  return array(
+
+    'WP_LANG' => 'es_ES',
+
+    'FS_METHOD' => 'direct'
+
+    // ... more constants
+
+  );
+
+
+All keys will be defined as constants by Ixa Wp-Config in order to properly configure WordPress. If there is a file called `config.test.php` and we are in _test enviroment_ this file will be loaded and its key will take precedence over `config.php`.
+
+
