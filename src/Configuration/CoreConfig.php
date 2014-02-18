@@ -19,15 +19,29 @@ class CoreConfig extends AbstractConfigLoader{
 	 * @return void
 	 */
 	function load(){
-		$path = $this->getFilePath();
+		
+		$this->loadFile($this->getFilePath());
+		$this->loadFile($this->getEnvironmentFilePath(), false);
+
+	}
+
+
+
+	protected function loadFile($path, $strict = true){
 
 		if(! file_exists($path)){
-			throw new FileNotFoundException('Core Config', $path);
+
+			if($strict) throw new FileNotFoundException('Core Config', $path);
+
+			return;
 		}
 
 		$config = include $path;
 
-		$this->setParams($config);
+		
+		
+		$this->addToParams($config);
+
 	}
 
 
@@ -41,15 +55,21 @@ class CoreConfig extends AbstractConfigLoader{
 	}
 
 
-	function getFileName(){
+	function getFileName($suffix = ''){
 		$name = ($this->fileName) ? $this->fileName : self::DEFAULT_FILE_NAME;
-		return $name . self::EXT;
+		return $name . $suffix . self::EXT;
 	}
 
 
-	function setParams(array $params){
-		$this->params = $params;
+	function addToParams(array $params){
+		$this->params = array_merge($this->params, $params);
 	}
 
+
+	function getEnvironmentFilePath(){
+		if(defined('ENVIRONMENT')){
+			return 	$this->getDir() . $this->getFileName('.' . ENVIRONMENT);
+		}
+	}
 
 }

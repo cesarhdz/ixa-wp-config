@@ -15,10 +15,9 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 
 
 	function testEnVarConfigCanBeCreatedWithAPath(){
-		
+
 		$config = new CoreConfig($this->currentDir);
-
-
+		
 		$this->assertSame($config->getDir(),$this->currentDir);
 
 	}
@@ -53,12 +52,24 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 			);
 	}
 
+	function testEnviromentPath(){
+		$config = new CoreConfig('');
+
+		$this->assertSame(
+			$config->getEnvironmentFilePath(),
+			'config.test.php'
+			// "The path of configuration by environment must end with config.test.php"
+
+			);
+
+	}
+
 
 
 
 	function testConfigLoad(){
 
-		$config = $this->getConfig('');
+		$config = $this->getConfig();
 
 		$config->load();
 
@@ -70,7 +81,7 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 	function testIfFileNotExistsWhenLoadingAnExceptionIsThrown(){
 
 		// Load a valid folder
-		$config = $this->getConfig('');
+		$config = $this->getConfig();
 		$config->load();
 		$this->assertSame($config->getFileName(), 'config.php');
 
@@ -81,6 +92,16 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function testConfigAndEnvironmentConfigAreLoaded(){
+
+		$config = $this->getConfig('merge');
+		$config->load();
+
+
+		$this->assertCount(4, $config->getParams());
+	}
+
+
 
 	/**
 	 * Get Config
@@ -88,9 +109,9 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 	 * @param  [type] $fileName file to load
 	 * @return EnvironmentConfig     new ConfigLoader ready to test
 	 */
-	function getConfig($fileName){
+	function getConfig($dir = 'core', $fileName = ''){
 
-		$dir = get_config_dir('core');
+		$dir = get_config_dir($dir);
 
 		return new CoreConfig($dir, $fileName);
 	}
