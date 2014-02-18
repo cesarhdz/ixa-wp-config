@@ -7,7 +7,7 @@ use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
 use Symfony\Component\Yaml\Parser;
 
 
-class EnvironmentConfig implements ConfigLoader{
+class EnvironmentConfig extends AbstractConfigLoader{
 
 	const EXT = '.yml';
 	const DEFAULT_FILE_NAME = '.env';
@@ -23,17 +23,10 @@ class EnvironmentConfig implements ConfigLoader{
 		'wp_home'
 	);
 
-	protected $dir;
-	protected $fileName;
-
-	protected $params;
 
 	public function __construct($dir, $fileName = null){
-		$this->setDir($dir);
-		$this->setFileName($fileName);
+		parent::__construct($dir, $fileName);
 
-
-		$this->params = array();
 		$this->setParser(new Parser());
 	}
 
@@ -72,15 +65,6 @@ class EnvironmentConfig implements ConfigLoader{
 	}
 
 
-	function getFilePath(){
-		return $this->getDir() . $this->getFileName();
-	}
-
-	function getParams(){
-		return $this->params;
-	}
-
-
 	function setParams(array $params){
 		if(array_key_exists(self::PARAMS_KEY, $params) && is_array($params[self::PARAMS_KEY])){
 			$this->params = array_intersect_key(
@@ -97,20 +81,7 @@ class EnvironmentConfig implements ConfigLoader{
 	}
 
 
-	function getDir(){
-		return $this->dir;
-	}
-
-
 	function setParser(Parser $parser){
 		$this->parser = $parser;
-	}
-
-	protected function setDir($dir){
-		$this->dir = $dir;
-	}
-
-	protected function setFileName($fileName){
-		$this->fileName = $fileName;
 	}
 }
