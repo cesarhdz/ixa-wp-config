@@ -12,7 +12,7 @@ class Config{
 
 	protected static $defaultLoaders = array(
 		'environment' => 'Ixa\\WordPress\\Configuration\\EnvironmentConfig',
-		'config' => 'Ixa\\WordPress\\Configuration\\EnvironmentConfig'
+		'core' => 'Ixa\\WordPress\\Configuration\\CoreConfig'
 	);
 
 	function __construct($dir){

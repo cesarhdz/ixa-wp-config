@@ -30,10 +30,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
-	function testEnvironmentLoaderIsPredefined(){
+	function testEnvironmentAndCoreLoadersArePredefined(){
 
-		$this->assertNotNull($this->obj->getLoader('environment'));
-		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\ConfigLoader',  $this->obj->getLoader('environment'));
+		$loader = $this->obj->getLoader('environment');
+
+		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\ConstantsConfig',  $loader);
+		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\EnvironmentConfig',  $loader);
+
+
+		$loader = $this->obj->getLoader('core');
+
+		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\ConstantsConfig',  $loader);
+		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\CoreConfig',  $loader);
 
 	}
 
@@ -63,9 +71,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase{
 
 	function testAllRegisteredLoaderesAreRun(){
 
+		$loaders = array('environment', 'core', 'custom1', 'custom2', 'custom3', 'custom4', 'custom5');
+
 		// 10 loaders are bound
-		for ($i=0; $i < 10; $i++) {
-			
+		foreach ($loaders as $name) {
 			$loader = $this->getMock('Ixa\\WordPress\\Configuration\\ConfigLoader');
 					
 			$loader->expects($this->once())
@@ -73,8 +82,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase{
 
 			$loader->expects($this->once())
 				 ->method('save');
-
-			$name = ($i == 0) ? 'environment' : 'e-'.$i;
 
 			$this->obj->bind($name, function($dir) use ($loader){
 				return $loader;
@@ -86,20 +93,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
-	function testDEfaultLoadersAreEnvironmentAndCore(){
-
-		$clazz = 'Ixa\\WordPress\\Configuration\\ConstantsConfig';
-
-		$this->assertInstanceOf($clazz, $this->obj->getLoader('environment'));
-		$this->assertInstanceOf($clazz, $this->obj->getLoader('environment'));
-
+	protected function mockEnvLoader(array $methods = array()){
+		return $this->mockLoader('EnvironmentConfig', $methods);
 	}
 
 
-	protected function mockEnvLoader(array $methods = array()){
-		return $this
-			->getMockBuilder('Ixa\\WordPress\\Configuration\\EnvironmentConfig')
-			->setMethods($methods);
+	protected function mockCoreLoader(array $methods = array()){
+		return $this->mockLoader('CoreConfig', $methods);
+	}
+
+
+	protected function mockLoader($class, array $methods = array()){
+		$clazz = 'Ixa\\WordPress\\Configuration\\' . $class;
+
+		return $this->getMockBuilder($clazz)->setMethods($methods);
+
 	}
 
 }
