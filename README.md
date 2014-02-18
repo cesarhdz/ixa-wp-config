@@ -1,7 +1,9 @@
 Ixa WP-Config
 -------------
 
-WordPress configuration consistent across environments.
+[![Build Status](https://travis-ci.org/cesarhdz/ixa-wp-config.png?branch=develop)](https://travis-ci.org/cesarhdz/ixa-wp-config)
+
+Consistent WordPress configuration across environments.
 
 
 ## Installation

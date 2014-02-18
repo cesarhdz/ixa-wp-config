@@ -1,6 +1,6 @@
 {
     "name": "ixa/wp-config",
-    "description": "WordPress Configurator Alternative",
+    "description": "Consistent WordPress configuration across environments.",
     "type": "library",
     "require": {
         "symfony/yaml": "~2.4"
