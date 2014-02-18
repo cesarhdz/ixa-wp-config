@@ -2,7 +2,7 @@
 
 
 
-require dirname(__FILE__) .'/../../vendor/autoload.php';
+require __DIR__ .'/../../vendor/autoload.php';
 
 
 define('ENVIRONMENT', 'test');
@@ -11,8 +11,7 @@ define('ENVIRONMENT', 'test');
 function get_config_dir($name){
 
 
-
-	return dirname(__FILE__) . '/../fixtures/' . $name . '/';
+	return __DIR__ . '/../fixtures/' . $name . '/';
 
 
 }

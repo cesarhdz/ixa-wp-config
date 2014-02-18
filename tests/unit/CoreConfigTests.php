@@ -9,7 +9,7 @@ class CoreConfigTest extends \PHPUnit_Framework_TestCase{
 
 	function setUp(){
 
-		$this->currentDir = dirname(__FILE__) . '/';
+		$this->currentDir = __DIR__ . '/';
 		$this->config = new CoreConfig('');
 	}
 
