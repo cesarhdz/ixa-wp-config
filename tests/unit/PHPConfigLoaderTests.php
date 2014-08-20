@@ -79,24 +79,4 @@ class PHPConfigTests extends \PHPUnit_Framework_TestCase{
 		$this->assertCount(4, $params);
 		$this->assertEquals('es_ES', $params['WP_LANG']);
 	}
-
-
-	// function testAllParamsAreRegisteredAsConstantsAndCannotBeOverrriden(){
-
-
-	// 	$config = $this->getConfig();
-	// 	$config->setParams(array(
-	// 		'wp_lang' => 'es_ES',
-	// 		'fs_method' => 'direct'
-	// 	));
-
-	// 	$config->save();
-	// 	$config->save();
-	// 	$config->save();
-
-	// 	$this->assertEquals(FS_METHOD, 'direct');
-	// 	$this->assertEquals(WP_LANG, 'es_ES');
-	// }
-
-
 }
