@@ -21,16 +21,16 @@ class PHPConfigLoader extends AbstractConfigLoader{
 	function load(){
 		$this->loadFile($this->getFilePath());
 		$this->loadFile($this->getEnvironmentFilePath(), false);
+
+		// Return params
+		return $this->getParams();
 	}
 
 
 
 	protected function loadFile($path, $strict = true){
-
 		if(! file_exists($path)){
-
 			if($strict) throw new FileNotFoundException('Core Config', $path);
-
 			return;
 		}
 

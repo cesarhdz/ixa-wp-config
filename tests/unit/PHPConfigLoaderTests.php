@@ -33,53 +33,52 @@ class PHPConfigTests extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function test_should_load_config(){
+		$config = new PHPConfigLoader(get_config_dir('php'), 'config');
+
+		$config->load();
+
+		$this->assertTrue(is_array($config->getParams()));
+		$this->assertCount(4, $config->getParams());
+	}
 
 
-	// function testConfigLoad(){
-
-	// 	$config = $this->getConfig();
-
-	// 	$config->load();
-
-	// 	$this->assertTrue(is_array($config->getParams()));
-	// 	$this->assertCount(4, $config->getParams());
-	// }
-
-
-	// function testIfFileNotExistsWhenLoadingAnExceptionIsThrown(){
-
-	// 	// Load a valid folder
-	// 	$config = $this->getConfig();
-	// 	$config->load();
-	// 	$this->assertSame($config->getFileName(), 'config.php');
-
-	// 	// Then an invalid folder
-	// 	$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\FileNotFoundException');
-	// 	$this->config->load();
-
-	// }
-
-
-	// function testIfConfigFileDoesntReturnArreayAndExceptionIsThrown(){
+	function test_should_throw_exception_if_array_is_not_returned(){
+		// expect
+		$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\InvalidConfigException');
 		
-	// 	$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\InvalidConfigException');
+		//given
+		$config = new PHPConfigLoader(get_config_dir('php'), 'invalid');
+
+		// when
+		$config->load();
+	}
+
+
+	function test_should_throw_exception_if_main_file_doesnt_exists(){
+		// expect
+		$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\FileNotFoundException');
 		
-	// 	$config = $this->getConfig('core', 'invalid');
+		// given
+		$config = new PHPConfigLoader(get_config_dir('php'), 'not-found');
 
-	// 	$config->load();
-	// }
+		// when
+		$config->load();
+	}
 
 
-	// function testConfigAndEnvironmentConfigAreLoaded(){
+	function test_should_merge_default_and_environemnt_config(){
+		// given
+		$dir = get_config_dir('php');
+		$config = new PHPConfigLoader($dir, 'merge', 'test');
 
-	// 	$config = $this->getConfig('merge');
-	// 	$config->load();
+		// when
+		$params = $config->load();
 
-	// 	$params = $config->getParams();
-
-	// 	$this->assertCount(4, $params);
-	// 	$this->assertEquals('es_ES', $params['WP_LANG']);
-	// }
+		// then
+		$this->assertCount(4, $params);
+		$this->assertEquals('es_ES', $params['WP_LANG']);
+	}
 
 
 	// function testAllParamsAreRegisteredAsConstantsAndCannotBeOverrriden(){
@@ -97,20 +96,6 @@ class PHPConfigTests extends \PHPUnit_Framework_TestCase{
 
 	// 	$this->assertEquals(FS_METHOD, 'direct');
 	// 	$this->assertEquals(WP_LANG, 'es_ES');
-	// }
-
-
-	// /**
-	//  * Get Config
-	//  * Return a EnvironmentConfigObject
-	//  * @param  [type] $fileName file to load
-	//  * @return EnvironmentConfig     new ConfigLoader ready to test
-	//  */
-	// function getConfig($dir = 'core', $fileName = ''){
-
-	// 	$dir = get_config_dir($dir);
-
-	// 	return new CoreConfig($dir, $fileName);
 	// }
 
 
