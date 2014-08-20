@@ -81,11 +81,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase{
 
 			$loader = $this->mockLoader($clazz);
 
-			$this->obj->bind($name, function($dir) use ($loader){
+			$once = $this->once();
+
+			$this->obj->bind($name, function($dir) use ($loader, $once){
 
 				$mock = $loader->setConstructorArgs(array($dir))->getMock();
 	
-				$mock->expects($this->once())
+				$mock->expects($once)
 					 ->method('load');
 
 				return $mock;
