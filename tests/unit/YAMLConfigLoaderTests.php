@@ -19,6 +19,29 @@ class YAMLConfigLoadeerTest extends \PHPUnit_Framework_TestCase{
 	}
 
 
+	function test_should_load_config(){
+		$config = new YAMLConfigLoader(get_config_dir('yaml'), 'config');
+
+		$config->load();
+
+		$this->assertTrue(is_array($config->getParams()));
+		$this->assertCount(6, $config->getParams());
+	}
+
+
+	function test_should_merge_default_and_environemnt_config(){
+		// given
+		$dir = get_config_dir('yaml');
+		$config = new YAMLConfigLoader($dir, 'merge', 'test');
+
+		// when
+		$params = $config->load();
+
+		// then
+		$this->assertCount(4, $params);
+		$this->assertEquals('es_ES', $params['WP_LANG']);
+	}
+
 
 	/**
 	 * Get Config
