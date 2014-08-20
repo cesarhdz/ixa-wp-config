@@ -26,27 +26,18 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 	}
 
 	abstract public function load();
+
+	abstract public function getExt();
 	
 	/**
 	 * Save
 	 * Register all params as constants
+	 * @deprecated
 	 * @return void
 	 */
 	function save(){
-		foreach ($this->getParams() as $key => $value) {
-			$constant = strtoupper($key);
-
-			if(! defined($constant)) define($constant, $value);
-		}
-	}
-
-
-	function getFilePath(){
-		return $this->getDir() . $this->getFileName();
-	}
-
-	function getFileName(){
-		return $this->fileName;
+		// Configuration should not be saved
+		trigger_error("Save method is deprecated in " . __CLASS__, E_WARNING);
 	}
 
 	function getDir(){
@@ -55,6 +46,10 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 
 	function getParams(){
 		return $this->params;
+	}
+
+	function addToParams(array $params){
+		$this->params = array_merge($this->params, $params);
 	}
 
 	function setParams(array $params){
@@ -73,4 +68,14 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 		$this->environment = $environment;
 	}
 
+
+	function getFileName(){
+		return $this->fileName . $this->getExt();
+	}
+
+	function getEnvironmentFilePath(){
+		if($this->environment){
+			return $this->fileName . '.' . $this->environment . $this->getExt();
+		}
+	}
 }

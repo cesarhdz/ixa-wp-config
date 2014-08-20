@@ -10,8 +10,12 @@ use Symfony\Component\Yaml\Parser;
 
 class PHPConfigLoader extends AbstractConfigLoader{
 
-	const EXT = '.php';
+	const EXT = 'php';
 
+
+	function getExt(){
+		return '.' . self::EXT;
+	}
 
 	/**
 	 * Load
@@ -19,7 +23,7 @@ class PHPConfigLoader extends AbstractConfigLoader{
 	 * @return void
 	 */
 	function load(){
-		$this->loadFile($this->getFilePath());
+		$this->loadFile($this->getFileName());
 		$this->loadFile($this->getEnvironmentFilePath(), false);
 
 		// Return params
@@ -27,8 +31,13 @@ class PHPConfigLoader extends AbstractConfigLoader{
 	}
 
 
-
 	protected function loadFile($path, $strict = true){
+
+		// Path should be absolute
+		if($path){
+			$path = $this->dir . $path;
+		}
+
 		if(! file_exists($path)){
 			if($strict) throw new FileNotFoundException('Core Config', $path);
 			return;
@@ -42,22 +51,4 @@ class PHPConfigLoader extends AbstractConfigLoader{
 		
 		$this->addToParams($config);
 	}
-
-
-	function getFileName($suffix = ''){
-		return $this->fileName . $suffix . self::EXT;
-	}
-
-
-	function addToParams(array $params){
-		$this->params = array_merge($this->params, $params);
-	}
-
-
-	function getEnvironmentFilePath(){
-		if($this->environment){
-			return 	$this->getDir() . $this->getFileName('.' . $this->environment);
-		}
-	}
-
 }
