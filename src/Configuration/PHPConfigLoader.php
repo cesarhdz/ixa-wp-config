@@ -23,7 +23,7 @@ class PHPConfigLoader extends AbstractConfigLoader{
 		$this->loadFile($this->getEnvironmentFilePath(), false);
 
 		// Return params
-		return $this->getParams();
+		return new Repository($this->getParams());
 	}
 
 
