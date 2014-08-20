@@ -17,22 +17,8 @@ class PHPConfigLoader extends AbstractConfigLoader{
 		return '.' . self::EXT;
 	}
 
-	/**
-	 * Load
-	 * Parse and save file into $this->params
-	 * @return void
-	 */
-	function load(){
-		$this->loadFile($this->getFileName());
-		$this->loadFile($this->getEnvironmentFilePath(), false);
-
-		// Return params
-		return new Repository($this->getParams());
-	}
-
-
+	
 	protected function loadFile($path, $strict = true){
-
 		// Path should be absolute
 		if($path){
 			$path = $this->dir . $path;
@@ -51,4 +37,5 @@ class PHPConfigLoader extends AbstractConfigLoader{
 		
 		$this->addToParams($config);
 	}
+	
 }

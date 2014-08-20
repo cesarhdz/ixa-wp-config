@@ -39,7 +39,7 @@ class YAMLConfigLoadeerTest extends \PHPUnit_Framework_TestCase{
 
 		// then
 		$this->assertCount(4, $params);
-		$this->assertEquals('es_ES', $params['WP_LANG']);
+		$this->assertEquals('es_ES', $params['WP.LANG']);
 	}
 
 

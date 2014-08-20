@@ -25,8 +25,23 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 		$this->params = array();
 	}
 
-	abstract public function load();
 
+	/**
+	 * Load
+	 * Parse and save file into $this->params
+	 * @return void
+	 */
+	function load(){
+		$this->loadFile($this->getFileName());
+		$this->loadFile($this->getEnvironmentFilePath(), false);
+
+		// Return params
+		return new Repository($this->params);
+	}
+
+
+	abstract protected function loadFile($path, $strict = false);
+	
 	abstract public function getExt();
 	
 	/**
