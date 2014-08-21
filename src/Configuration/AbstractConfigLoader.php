@@ -12,13 +12,6 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 	protected $params;
 
 	public function __construct($dir, $filename = null, $environment = null){
-		// In order to make compliant with ConfigLoader interface
-		// $filename params is set to null, but if its not given
-		// an InvalidArgumentException is thrown
-		if(! $filename){
-			throw new \InvalidArgumentException('Filename is required to create a ConfigLoader');
-		}
-
 		$this->setDir($dir);
 		$this->setFileName($filename);
 		$this->setEnvironment($environment);
@@ -32,6 +25,18 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 	 * @return void
 	 */
 	function load(){
+		// In order to make compliant with ConfigLoader interface
+		// $filename params is set to null, but if its not given
+		// an InvalidArgumentException is thrown
+		if(! $this->fileName){
+			$msg = ' requires a filename to load config, '
+					. 'you can provide one either by the constructor (2nd argument)'
+					. 'or `setFileName()` method.';
+
+			throw new \LogicException(__CLASS__ . $msg);
+		}
+
+
 		$this->loadFile($this->getFileName());
 		$this->loadFile($this->getEnvironmentFilePath(), false);
 

@@ -15,9 +15,10 @@ class PHPConfigTests extends \PHPUnit_Framework_TestCase{
 
 	function test_should_thron_invalid_argument_exception_if_filename_is_not_given(){
 
-		$this->setExpectedException('InvalidArgumentException');
+		$this->setExpectedException('LogicException');
 
-		new PHPConfigLoader('no file ??');
+		$config = new PHPConfigLoader('no file ??');
+		$config->load();
 	}
 
 
