@@ -1,0 +1,14 @@
+# Default Params
+parameters:
+  
+  # Environment
+  ENVIRONMENT:    dev
+
+  # Database Credentials
+  DB_NAME:        wordpress 
+  DB_USER:        root
+  DB_PASSWORD:    ""
+  DB_HOST:        localhost
+
+  # Site URL
+  WP_HOME:        http://localhost:1234/
