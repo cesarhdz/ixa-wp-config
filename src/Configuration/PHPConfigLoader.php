@@ -13,10 +13,6 @@ class PHPConfigLoader extends AbstractConfigLoader{
 	const EXT = 'php';
 
 
-	function supports($name){
-		return $name === self::EXT;
-	}
-
 	function getExt(){
 		return '.' . self::EXT;
 	}

@@ -14,12 +14,8 @@ interface ConfigurationLoader{
 	 */
 	function load($dir, $name);
 
-	/**
-	 * Save
-	 * Register all params as constants
-	 * @return void
-	 */
-	function supports($name);
+	
+	function find($dir, $name);
 
 
 }

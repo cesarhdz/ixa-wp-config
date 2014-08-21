@@ -3,91 +3,56 @@
 namespace Ixa\WordPress\Configuration;
 
 
-class CoonfigHolder{
-
+class ConfigHolder{
 
 	protected $dir;
-	protected $name;
-	protected $loaders;
+	protected $environment;
+	protected $loaders = array();
 
 
 	protected static $defaultLoaders = array(
-		'environment' => 	'Ixa\\WordPress\\Configuration\\PHPConfigLoader',
-		'core' => 			'Ixa\\WordPress\\Configuration\\YAMLConfigLoader'
+		'php' 	=> 	'Ixa\\WordPress\\Configuration\\PHPConfigLoader',
+		'yaml' 	=> 	'Ixa\\WordPress\\Configuration\\YAMLConfigLoader'
 	);
 
-	function __construct($dir, $name, $environment = null){
-		$this->setDir($dir);
-		$this->name = $name;
+	function __construct($environment = null){
+		$this->environment = $environment;
 
 		$this->bindDefaultLoaders();
 	}
 
+	function registerLoader($name, $loader){
+		self::$loaders[$name] = $loader;
+	}
 
-	/**
-	 * Load
-	 * Call all registered Config Loaders
-	 * @return void 
-	 */
-	function load(){
+
+	function dir($dir){
+		$this->setDir($dir);
+
+		return $this;
+	}
+
+
+	function load($name){
 		foreach ($this->loaders as $loader){
-			// A different method can be called based on class
-			$method = $this->getMethodFromLoader($loader);
-			
-			$this->$method($loader);
+
+
+			if($loader->find($this->dir, $name)){
+				return $loader->load($this->dir, $name);
+			}
 		}
 	}
-
-	function getMethodFromLoader(ConfigLoader $loader){
-		return ($loader instanceof ConstantsConfig) ? 'loadAndDefine' : 'loadAndSave';
-	}
-
-
-	protected function loadAndDefine(ConstantsConfig $loader){
-		$loader->load();
-		$loader->save();
-	}
-
-	protected function loadAndSave(ConfigLoader $loader){
-		$loader->load();
-	}
-
-
-	function getDir(){
-		return $this->dir;
-	}
-
-
-	function bind($name, $function){
-
-		$method = (array_key_exists($name, self::$defaultLoaders)) 
-				? 'addDefaultLoader' 
-				: 'addLoader';
-
-
-		// AddLoader		
-		$this->$method($name, call_user_func($function, $this->getDir()));
-	}
-
 
 	function getLoader($name){
 		return $this->loaders[$name];
 	}
 
-
-	protected function addLoader($name, ConfigLoader $obj){
+	protected function addLoader($name, ConfigurationLoader $obj){
 		$this->loaders[$name] = $obj;
 	}
 
 
-
-	protected function addDefaultLoader($name, ConstantsConfig $obj){
-		$this->loaders[$name] = $obj;
-	}
-
-
-
-	function setDir($dir){
+	protected function setDir($dir){
 		$this->dir = rtrim($dir, '/') . '/';
 	}
 
@@ -96,16 +61,25 @@ class CoonfigHolder{
 		$this->loaders = array();
 
 		foreach (self::$defaultLoaders as $key => $clazz){
-			$this->addLoader($key, new $clazz($this->getDir($this->dir, $this->name, $this->environment)));
+			$this->addLoader($key, new $clazz($this->environment));
 		}
+	}
+
+
+	/**
+	 * Autcontainer
+	 * Eventhoug singletons are not a good practice, WordPress
+	 * doen't have a dependency Container, so using static methods
+	 * we can get the same instance in the whole app
+	 */
+	private static $instance;
+
+	static function init($dev){
+		self::$instance = new self($dev);
+	}
+
+	static function get(){
+		return self::$instance;
 	}
 }
 
-
-// Preset
-ConfigHolder::setEnvironment(ENVIRONMENT);
-ConfigHolder::setBaseDir($defaultDir);
-ConfigHolder::setDefaultLoader('yaml');
-
-
-$config = ConfigHolder::loader('php')->get('name');

@@ -19,10 +19,6 @@ class YAMLConfigLoader extends AbstractConfigLoader{
 		$this->setParser(new Parser());
 	}
 
-	function supports($name){
-		return $name === self::EXT;
-	}
-
 
 	function getExt(){
 		return '.' . self::EXT;

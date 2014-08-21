@@ -12,8 +12,7 @@ abstract class AbstractConfigLoader implements ConfigurationLoader{
 	}
 
 	abstract public function getExt();
-	abstract public function supports($name);
-	
+
 	abstract protected function parseFile($path);
 
 
@@ -44,6 +43,13 @@ abstract class AbstractConfigLoader implements ConfigurationLoader{
 		}
 
 		return $repo;
+	}
+
+
+	function find($dir, $name){
+		$path = $this->getFilename($dir, $name);
+
+		return(file_exists($path));
 	}
 
 	private function setEnvironment($environment){
