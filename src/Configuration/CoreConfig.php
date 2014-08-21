@@ -7,7 +7,7 @@ use Ixa\WordPress\Configuration\Exceptions\InvalidConfigException;
 
 use Symfony\Component\Yaml\Parser;
 
-
+// @deprecated
 class CoreConfig extends ConstantsConfig{
 
 	const EXT = '.php';

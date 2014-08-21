@@ -13,29 +13,23 @@ class PHPConfigLoader extends AbstractConfigLoader{
 	const EXT = 'php';
 
 
+	function supports($name){
+		return $name === self::EXT;
+	}
+
 	function getExt(){
 		return '.' . self::EXT;
 	}
 
 	
-	protected function loadFile($path, $strict = true){
-		// Path should be absolute
-		if($path){
-			$path = $this->dir . $path;
-		}
-
-		if(! file_exists($path)){
-			if($strict) throw new FileNotFoundException('Core Config', $path);
-			return;
-		}
-
-		$config = include $path;
+	protected function parseFile($file){
+		$config = include $file;
 
 		if(! is_array($config)){
-			throw new InvalidConfigException("The config file must return an instance of Array", $path);
+			throw new InvalidConfigException("The config file must return an instance of Array", $file);
 		}
 		
-		$this->addToParams($config);
+		return $config;	
 	}
 	
 }

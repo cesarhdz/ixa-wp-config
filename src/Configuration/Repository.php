@@ -17,6 +17,10 @@ class Repository implements ArrayAccess, Countable {
 		return array_key_exists($key, $this->params);
 	}
 
+	function merge(array $params){
+		$this->params = array_merge($this->params, $params);
+	}
+
 	function offsetExists($offset){
 		return $this->has($key);
 	}

@@ -13,10 +13,14 @@ class YAMLConfigLoader extends AbstractConfigLoader{
 	const EXT = 'yml';
 	const PARAMS_KEY = 'parameters';
 
-	public function __construct($dir, $fileName = null, $environment = null){
-		parent::__construct($dir, $fileName, $environment);
+	public function __construct($environment = null){
+		parent::__construct($environment);
 
 		$this->setParser(new Parser());
+	}
+
+	function supports($name){
+		return $name === self::EXT;
 	}
 
 
@@ -25,20 +29,14 @@ class YAMLConfigLoader extends AbstractConfigLoader{
 	}
 
 
-	function loadFile($path, $strict = false){
-		// Path should be absolute
-		if($path){
-			$path = $this->dir . $path;
-		}
-
-
+	function parseFile($path, $strict = false){
 		$config = $this->parse($path, $strict);
 
-		if(! $config) return;
+		if(!$config) return;
 
 		$this->validateFormat($config, $path);
 
-		$this->addToParams($config[self::PARAMS_KEY]);
+		return $config[self::PARAMS_KEY];
 	}
 
 

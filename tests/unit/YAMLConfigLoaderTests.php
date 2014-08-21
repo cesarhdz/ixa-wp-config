@@ -7,54 +7,47 @@ use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
 class YAMLConfigLoadeerTest extends \PHPUnit_Framework_TestCase{
 
 
-	
+	function setUp(){
+		$this->loader = new YAMLConfigLoader();
+		$this->dir = get_config_dir('yaml');
+	}
+
+
+
 	function test_should_get_full_file_path(){
-		$config = new YAMLConfigLoader('', '.env');
-		$this->assertSame('.env.yml', $config->getFileName());
+		// where
+		$name = 'config';
+		$env = 'dev';
 
+		// expect
+		$result = $this->loader->getFileName($this->dir, $name); 
+		$this->assertSame($this->dir . 'config.yml', $result);
+		
 
-		$config = new YAMLConfigLoader('', '.env', 'dev');
-		$this->assertSame('.env.dev.yml', $config->getEnvironmentFilePath());
-
+		$result = $this->loader->getFileName($this->dir, $name, $env);
+		$this->assertSame($this->dir . 'config.dev.yml', $result);
 	}
 
 
 	function test_should_load_config(){
-		$config = new YAMLConfigLoader(get_config_dir('yaml'), 'config');
+		// when
+		$config = $this->loader->load($this->dir, 'config');
 
-		$config->load();
-
-		$this->assertTrue(is_array($config->getParams()));
-		$this->assertCount(6, $config->getParams());
+		// then
+		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\Repository', $config);
+		$this->assertCount(6, $config);
 	}
 
 
 	function test_should_merge_default_and_environemnt_config(){
 		// given
-		$dir = get_config_dir('yaml');
-		$config = new YAMLConfigLoader($dir, 'merge', 'test');
+		$loader = new YAMLConfigLoader('test');
 
 		// when
-		$params = $config->load();
+		$config = $loader->load($this->dir, 'merge');
 
 		// then
-		$this->assertCount(4, $params);
-		$this->assertEquals('es_ES', $params['WP.LANG']);
+		$this->assertCount(4, $config);
+		$this->assertEquals('es_ES', $config['WP.LANG']);
 	}
-
-
-	/**
-	 * Get Config
-	 * Return a EnvironmentConfigObject
-	 * @param  [type] $fileName file to load
-	 * @return EnvironmentConfig     new ConfigLoader ready to test
-	 */
-	function getConfig($fileName){
-
-		$dir = get_config_dir('env-vars');
-
-		return new EnvironmentConfig($dir, $fileName);
-	}
-
-
 }

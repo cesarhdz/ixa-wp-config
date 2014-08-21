@@ -6,7 +6,7 @@ use Ixa\WordPress\Configuration\Exceptions\FileNotFoundException;
 
 use Symfony\Component\Yaml\Parser;
 
-
+// @deprecated
 class EnvironmentConfig extends ConstantsConfig{
 
 	const EXT = '.yml';

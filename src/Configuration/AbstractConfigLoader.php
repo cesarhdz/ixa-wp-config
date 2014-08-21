@@ -3,20 +3,18 @@
 namespace Ixa\WordPress\Configuration;
 
 
-abstract class AbstractConfigLoader implements ConfigLoader{
+abstract class AbstractConfigLoader implements ConfigurationLoader{
 
-	protected $dir;
-	protected $fileName;
-	protected $environment;
+	private $environment;
 
-	protected $params;
-
-	public function __construct($dir, $filename = null, $environment = null){
-		$this->setDir($dir);
-		$this->setFileName($filename);
+	public function __construct($environment = null){
 		$this->setEnvironment($environment);
-		$this->params = array();
 	}
+
+	abstract public function getExt();
+	abstract public function supports($name);
+	
+	abstract protected function parseFile($path);
 
 
 	/**
@@ -24,78 +22,37 @@ abstract class AbstractConfigLoader implements ConfigLoader{
 	 * Parse and save file into $this->params
 	 * @return void
 	 */
-	function load(){
-		// In order to make compliant with ConfigLoader interface
-		// $filename params is set to null, but if its not given
-		// an InvalidArgumentException is thrown
-		if(! $this->fileName){
-			$msg = ' requires a filename to load config, '
-					. 'you can provide one either by the constructor (2nd argument)'
-					. 'or `setFileName()` method.';
+	function load($dir, $filename){
+		$baseFile = $this->getFileName($dir, $filename);
 
-			throw new \LogicException(__CLASS__ . $msg);
+		// Base file must exits
+		if(! file_exists($baseFile)){
+			throw new Exceptions\FileNotFoundException(__CLASS__, $baseFile);
 		}
 
+		// Strat config repo
+		$config = $this->parseFile($baseFile);
+		$repo = new Repository($config);
 
-		$this->loadFile($this->getFileName());
-		$this->loadFile($this->getEnvironmentFilePath(), false);
+		if($this->environment){
+			$envFile = $this->getFilename($dir, $filename, $this->environment);
 
-		// Return params
-		return new Repository($this->params);
+			if(file_exists($envFile)){
+				$config = $this->parseFile($envFile);
+				$repo->merge($config);
+			}
+		}
+
+		return $repo;
 	}
 
-
-	abstract protected function loadFile($path, $strict = false);
-	
-	abstract public function getExt();
-	
-	/**
-	 * Save
-	 * Register all params as constants
-	 * @deprecated
-	 * @return void
-	 */
-	function save(){
-		// Configuration should not be saved
-		trigger_error("Save method is deprecated in " . __CLASS__, E_WARNING);
-	}
-
-	function getDir(){
-		return $this->dir;
-	}
-
-	function getParams(){
-		return $this->params;
-	}
-
-	function addToParams(array $params){
-		$this->params = array_merge($this->params, $params);
-	}
-
-	function setParams(array $params){
-		$this->params = $params;
-	}
-
-	protected function setDir($dir){
-		$this->dir = $dir;
-	}
-
-	protected function setFileName($fileName){
-		$this->fileName = $fileName;
-	}
-
-	protected function setEnvironment($environment){
+	private function setEnvironment($environment){
 		$this->environment = $environment;
 	}
 
+	function getFilename($dir, $file, $env = null){
+		$name = ($env) ? $file . '.' . $env : $file;
 
-	function getFileName(){
-		return $this->fileName . $this->getExt();
-	}
-
-	function getEnvironmentFilePath(){
-		if($this->environment){
-			return $this->fileName . '.' . $this->environment . $this->getExt();
-		}
+		return $dir . $name. $this->getExt();
 	}
 }

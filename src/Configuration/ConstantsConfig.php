@@ -2,7 +2,7 @@
 
 namespace Ixa\WordPress\Configuration;
 
-
+// @deprecated
 abstract class ConstantsConfig implements ConfigLoader{
 
 	protected $dir;

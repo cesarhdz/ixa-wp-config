@@ -8,39 +8,37 @@ class PHPConfigTests extends \PHPUnit_Framework_TestCase{
 
 
 	function setUp(){
-		$this->currentDir = __DIR__ . '/';
-		$this->config = new PHPConfigLoader($this->currentDir, 'config');
-	}
-
-
-	function test_should_thron_invalid_argument_exception_if_filename_is_not_given(){
-
-		$this->setExpectedException('LogicException');
-
-		$config = new PHPConfigLoader('no file ??');
-		$config->load();
+		$this->loader = new PHPConfigLoader();
+		$this->dir = get_config_dir('php');
 	}
 
 
 
 	function test_should_get_full_file_path(){
-		$config = new PHPConfigLoader('', 'config');
-		$this->assertSame('config.php', $config->getFileName());
+		// where
+		$name = 'config';
+		$env = 'dev';
 
+		// expect
+		$result = $this->loader->getFileName($this->dir, $name); 
+		$this->assertSame($this->dir . 'config.php', $result);
+		
 
-		$config = new PHPConfigLoader('', 'config', 'dev');
-		$this->assertSame('config.dev.php', $config->getEnvironmentFilePath());
-
+		$result = $this->loader->getFileName($this->dir, $name, $env);
+		$this->assertSame($this->dir . 'config.dev.php', $result);
 	}
 
 
 	function test_should_load_config(){
-		$config = new PHPConfigLoader(get_config_dir('php'), 'config');
+		// given
+		$name = 'config';
 
-		$config->load();
+		// when
+		$config = $this->loader->load($this->dir, $name);
 
-		$this->assertTrue(is_array($config->getParams()));
-		$this->assertCount(4, $config->getParams());
+		// then
+		$this->assertInstanceOf('Ixa\\WordPress\\Configuration\\Repository', $config);
+		$this->assertCount(4, $config);
 	}
 
 
@@ -48,11 +46,8 @@ class PHPConfigTests extends \PHPUnit_Framework_TestCase{
 		// expect
 		$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\InvalidConfigException');
 		
-		//given
-		$config = new PHPConfigLoader(get_config_dir('php'), 'invalid');
-
 		// when
-		$config->load();
+		$this->loader->load($this->dir, 'invalid');
 	}
 
 
@@ -60,24 +55,20 @@ class PHPConfigTests extends \PHPUnit_Framework_TestCase{
 		// expect
 		$this->setExpectedException('Ixa\\WordPress\\Configuration\\Exceptions\\FileNotFoundException');
 		
-		// given
-		$config = new PHPConfigLoader(get_config_dir('php'), 'not-found');
-
 		// when
-		$config->load();
+		$this->loader->load($this->dir, 'not-found');
 	}
 
 
 	function test_should_merge_default_and_environemnt_config(){
 		// given
-		$dir = get_config_dir('php');
-		$config = new PHPConfigLoader($dir, 'merge', 'test');
+		$loader = new PHPConfigLoader('test');
 
 		// when
-		$params = $config->load();
+		$config = $loader->load($this->dir, 'merge');
 
 		// then
-		$this->assertCount(4, $params);
-		$this->assertEquals('es_ES', $params['WP_LANG']);
+		$this->assertCount(4, $config);
+		$this->assertEquals('es_ES', $config['WP_LANG']);
 	}
 }
